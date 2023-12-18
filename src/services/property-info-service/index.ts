@@ -41,6 +41,20 @@ export const routes = (router: KoaRouter) => {
     }
   )
 
+  router.get(
+    '(.*)/rentalproperties/:id/rooms-with-material-choices',
+    async (ctx) => {
+      const apartmentId = ctx.params.id
+      const roomTypes = await getRoomTypes(apartmentId)
+      const matarialChoices = await getMaterialChoicesByRoomTypes(
+        apartmentId,
+        roomTypes
+      )
+
+      ctx.body = { roomTypes: matarialChoices }
+    }
+  )
+
   router.get('(.*)/rentalproperties/:id/material-choices', async (ctx) => {
     const apartmentId = ctx.params.id
     const materialChoices = await getMaterialChoicesByApartmentId(apartmentId)
@@ -48,12 +62,15 @@ export const routes = (router: KoaRouter) => {
     ctx.body = { materialChoices: materialChoices }
   })
 
-  router.get('(.*)/rentalproperties/:apartmentId/:contractId/material-choices', async (ctx) => {
-    const apartmentId = ctx.params.apartmentId + '/' + ctx.params.contractId
-    const materialChoices = await getMaterialChoicesByApartmentId(apartmentId)
+  router.get(
+    '(.*)/rentalproperties/:apartmentId/:contractId/material-choices',
+    async (ctx) => {
+      const apartmentId = ctx.params.apartmentId + '/' + ctx.params.contractId
+      const materialChoices = await getMaterialChoicesByApartmentId(apartmentId)
 
-    ctx.body = { materialChoices: materialChoices }
-  })
+      ctx.body = { materialChoices: materialChoices }
+    }
+  )
 
   // ?submitted=true|false
   router.get('(.*)/rentalproperties/material-choice-statuses', async (ctx) => {

@@ -212,7 +212,6 @@ const getMaterialChoicesByRoomTypes = async (
   apartmentId: string,
   roomTypes: RoomType[]
 ) => {
-  console.log('get choices by room types')
   for (const roomType of roomTypes) {
     const materialGroups = await getMaterialChoicesByRoomType({
       apartmentId: apartmentId,
@@ -241,7 +240,6 @@ const getMaterialChoicesByRoomType = async ({
   apartmentId: string
   roomTypeId: string
 }): Promise<Array<MaterialOptionGroup>> => {
-  console.log('get choices by room type')
   const rows = await db('MaterialOptionGroup')
     .innerJoin(
       'MaterialOption',
@@ -347,7 +345,7 @@ const getMaterialChoicesByRoomType = async ({
 }
 
 const getMaterialChoicesByApartmentId = async (apartmentId: string) => {
-  console.log('get choices by apartmentId');
+  console.log('get choices by apartmentId')
 
   const rows = await db('MaterialChoice')
     .select(
@@ -357,13 +355,17 @@ const getMaterialChoicesByApartmentId = async (apartmentId: string) => {
       'MaterialOption.ShortDescription',
       'MaterialChoice.ApartmentId'
     )
-    .join('MaterialOption', 'MaterialChoice.MaterialOptionId', 'MaterialOption.MaterialOptionId')
+    .join(
+      'MaterialOption',
+      'MaterialChoice.MaterialOptionId',
+      'MaterialOption.MaterialOptionId'
+    )
     .where({
       'MaterialChoice.Status': 'Submitted',
       'MaterialChoice.ApartmentId': apartmentId,
-    });
+    })
 
-  return rows;
+  return rows
 }
 
 const getApartmentMaterialChoiceStatuses = async (projectCode: string) => {
