@@ -208,20 +208,6 @@ const getRoomTypeWithMaterialOptions = async (roomTypes: RoomType[]) => {
 
   return roomTypes.filter(filterRoomTypes).sort(sortRoomTypes)
 }
-const getMaterialChoicesByRoomTypes = async (
-  apartmentId: string,
-  roomTypes: RoomType[]
-) => {
-  for (const roomType of roomTypes) {
-    const materialGroups = await getMaterialChoicesByRoomType({
-      apartmentId: apartmentId,
-      roomTypeId: roomType.roomTypeId,
-    })
-    roomType.materialOptionGroups = materialGroups
-  }
-
-  return roomTypes.filter(filterRoomTypes).sort(sortRoomTypes)
-}
 
 const filterRoomTypes = (roomType: RoomType) => {
   return (
@@ -233,12 +219,10 @@ const sortRoomTypes = (a: RoomType, b: RoomType) => {
   return a.name > b.name ? 1 : -1
 }
 
-const getMaterialChoicesByRoomType = async ({
+const getMaterialChoicesByRoomTypes = async ({
   apartmentId,
-  roomTypeId,
 }: {
   apartmentId: string
-  roomTypeId: string
 }): Promise<Array<MaterialOptionGroup>> => {
   const rows = await db('MaterialOptionGroup')
     .innerJoin(
@@ -257,8 +241,8 @@ const getMaterialChoicesByRoomType = async ({
       'MaterialOption.MaterialOptionId'
     )
     .where({
-      'MaterialOptionGroup.RoomType': roomTypeId,
       'MaterialChoice.Status': 'Submitted',
+      'MaterialChoice.ApartmentId': apartmentId,
     })
     .orderBy(
       'MaterialOption.MaterialOptionGroupId',
@@ -285,7 +269,7 @@ const getMaterialChoicesByRoomType = async ({
       ) {
         currentMaterialOptionGroup = {
           materialOptionGroupId: materialOptionGroupId,
-          roomTypeId: row.RoomType,
+          roomTypeId: row.RoomType[0],
           name: row.Name,
           actionName: row.ActionName,
           materialOptions: new Array<MaterialOption>(),
@@ -326,7 +310,7 @@ const getMaterialChoicesByRoomType = async ({
           materialOptionId: materialOptionId,
           materialOptionGroupId: materialOptionGroupId,
           apartmentId: apartmentId,
-          roomTypeId: row.RoomType,
+          roomTypeId: row.RoomType[0],
           status: row.Status,
         }
 
@@ -421,4 +405,6 @@ export {
   getApartmentMaterialChoiceStatuses,
   getAllSubmittedMaterialChoices,
   saveMaterialChoices,
+  filterRoomTypes,
+  sortRoomTypes,
 }

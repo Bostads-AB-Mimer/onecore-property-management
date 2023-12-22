@@ -16,8 +16,10 @@ import {
   getMaterialChoicesByApartmentId,
   saveMaterialChoices,
   getApartmentMaterialChoiceStatuses,
+  filterRoomTypes,
+  sortRoomTypes,
 } from './adapters/material-options-adapter'
-import { MaterialChoice } from '../../common/types'
+import { MaterialChoice, MaterialOptionGroup } from '../../common/types'
 
 /**
  * The routes of this service are exported as the routes object. The service can also have
@@ -46,12 +48,21 @@ export const routes = (router: KoaRouter) => {
     async (ctx) => {
       const apartmentId = ctx.params.id
       const roomTypes = await getRoomTypes(apartmentId)
-      const matarialChoices = await getMaterialChoicesByRoomTypes(
-        apartmentId,
-        roomTypes
-      )
+      const matarialChoices = await getMaterialChoicesByRoomTypes({
+        apartmentId: apartmentId,
+      })
 
-      ctx.body = { roomTypes: matarialChoices }
+      for (const roomType of roomTypes) {
+        roomType.materialOptionGroups = matarialChoices.filter(
+          (materialGroup: MaterialOptionGroup) => {
+            return materialGroup.roomTypeId == roomType.roomTypeId
+          }
+        )
+      }
+
+      ctx.body = {
+        roomTypes: roomTypes.filter(filterRoomTypes).sort(sortRoomTypes),
+      }
     }
   )
 
