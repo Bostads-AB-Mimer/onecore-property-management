@@ -51,7 +51,6 @@ export const routes = (router: KoaRouter) => {
       const matarialChoices = await getMaterialChoicesByRoomTypes({
         apartmentId: apartmentId,
       })
-
       for (const roomType of roomTypes) {
         roomType.materialOptionGroups = matarialChoices.filter(
           (materialGroup: MaterialOptionGroup) => {
@@ -59,7 +58,6 @@ export const routes = (router: KoaRouter) => {
           }
         )
       }
-
       ctx.body = {
         roomTypes: roomTypes.filter(filterRoomTypes).sort(sortRoomTypes),
       }

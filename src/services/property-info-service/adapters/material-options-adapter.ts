@@ -270,8 +270,8 @@ const getMaterialChoicesByRoomTypes = async ({
         currentMaterialOptionGroup = {
           materialOptionGroupId: materialOptionGroupId,
           roomTypeId: row.RoomType[0],
-          name: row.Name,
-          actionName: row.ActionName,
+          name: row.Name == null ? undefined : row.Name,
+          actionName: row.ActionName == null ? undefined : row.ActionName,
           materialOptions: new Array<MaterialOption>(),
           materialChoices: new Array<MaterialChoice>(),
           type: row.Type,
@@ -287,9 +287,10 @@ const getMaterialChoicesByRoomTypes = async ({
         currentMaterialOption = {
           materialOptionId: materialOptionId,
           caption: row.Caption,
-          shortDescription: row.ShortDescription,
-          description: row.Description,
-          coverImage: row.CoverImage,
+          shortDescription:
+            row.ShortDescription == null ? undefined : row.ShortDescription,
+          description: row.Description == null ? undefined : row.Description,
+          coverImage: row.CoverImage == null ? undefined : row.CoverImage,
           materialOptionGroupName: currentMaterialOptionGroup.name,
           images: new Array<string>(),
         }
