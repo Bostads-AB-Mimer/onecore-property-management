@@ -25,13 +25,6 @@ import {
   Listing,
   ListingStatus,
  } from 'onecore-types'
-import { ParkingSpaceApplicationCategory,
-  ParkingSpaceType,
-  Address,
-  Rent,
-  RentInfo,
-  XpandParkingSpace,
- } from '../../types/xpandTypes'
 import { getParkingSpace } from './adapters/xpand-adapter'
 import { getPublishedParkingSpaceFromSoapService } from './adapters/xpand-soap-adapter'
 
