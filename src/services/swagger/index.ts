@@ -6,7 +6,7 @@ export const routes = (router: KoaRouter) => {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'onecore-leasing',
+        title: 'onecore-property-management',
         version: '1.0.0',
       },
     },
