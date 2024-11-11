@@ -119,19 +119,19 @@ export const routes = (router: KoaRouter) => {
 
   /**
    * @swagger
-   * /rentalPropertyInfo/{id}:
+   * /rentalPropertyInfo/apartment/{rentalObjectCode}:
    *   get:
-   *     summary: Get rental property information by ID
+   *     summary: Get apartment rental property information by rental object code
    *     tags:
    *       - Property management
-   *     description: Retrieve detailed information about a rental property identified by {id}.
+   *     description: Retrieve detailed information about a rental property identified by {rentalObjectCode}.
    *     parameters:
    *       - in: path
-   *         name: id
+   *         name: rentalObjectCode
    *         required: true
    *         schema:
    *           type: string
-   *         description: ID of the rental property to fetch information for.
+   *         description: rentalObjectCode of the rental property to fetch information for.
    *     responses:
    *       '200':
    *         description: Successful response with the requested rental property information
@@ -139,8 +139,19 @@ export const routes = (router: KoaRouter) => {
    *           application/json:
    *             schema:
    *               type: object
+   *       '404':
+   *         description: Not found
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *       '500':
+   *         description: Internal server error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
-
   router.get(
     '(.*)/rentalPropertyInfo/apartment/:rentalObjectCode',
     async (ctx) => {
