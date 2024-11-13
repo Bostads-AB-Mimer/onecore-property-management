@@ -164,7 +164,7 @@ export const routes = (router: KoaRouter) => {
         if (result.err === 'not-found') {
           ctx.status = 404
           ctx.body = {
-            reason: `No rental property info found for property with id: ${ctx.params.id}`,
+            reason: `No rental property info found for property with rental object code: ${ctx.params.rentalObjectCode}`,
             ...metadata,
           }
 
@@ -172,7 +172,7 @@ export const routes = (router: KoaRouter) => {
         } else {
           ctx.status = 500
           ctx.body = {
-            error: `An error occurred while fetching the rental property info for property with id: ${ctx.params.id}`,
+            error: `An error occurred while fetching the rental property info for property with rentalObjectCode: ${ctx.params.rentalObjectCode}`,
             ...metadata,
           }
           return
