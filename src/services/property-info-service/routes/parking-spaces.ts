@@ -4,7 +4,8 @@ import { Listing, ListingStatus } from 'onecore-types'
 import {
   getAllVacantParkingSpaces,
   getParkingSpace,
-  getRentalObject,
+  getParkingSpaceOld,
+  getParkingSpaces,
 } from '../adapters/xpand-adapter'
 import { getPublishedParkingSpaceFromSoapService } from '../adapters/xpand-soap-adapter'
 
@@ -16,6 +17,120 @@ import { getPublishedParkingSpaceFromSoapService } from '../adapters/xpand-soap-
  */
 
 export const routes = (router: KoaRouter) => {
+  /**
+   * @swagger
+   * /parking-spaces:
+   *   get:
+   *     summary: Get parking spaces by codes
+   *     description: Fetches parking spaces filtered by includeRentalObjectCodes.
+   *     tags:
+   *       - RentalObject
+   *     parameters:
+   *       - in: query
+   *         name: includeRentalObjectCodes
+   *         schema:
+   *           type: string
+   *         description: Comma-separated list of rental object codes to include.
+   *     responses:
+   *       '200':
+   *         description: Successfully retrieved the parking spaces.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/VacantParkingSpace'
+   *       '500':
+   *         description: Internal server error. Failed to fetch parking spaces.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: The error message.
+   */
+  router.get('(.*)/parking-spaces', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const codesParam = ctx.query.includeRentalObjectCodes as string | undefined
+    const includeRentalObjectCodes = codesParam
+      ? codesParam
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined
+
+    const result = await getParkingSpaces(includeRentalObjectCodes)
+
+    if (!result.ok) {
+      logger.error(result.err, 'Error fetching rental objects:')
+      ctx.status = 500
+      ctx.body = {
+        error: 'An error occurred while fetching parking spaces.',
+        ...metadata,
+      }
+      return
+    }
+
+    ctx.status = 200
+    ctx.body = { content: result.data, ...metadata }
+  })
+
+  /**
+   * @swagger
+   * /parking-spaces/by-code/{rentalObjectCode}:
+   *   get:
+   *     summary: Get a parking space by rental object code
+   *     description: Fetches a parking space by Rental Object Code.
+   *     tags:
+   *       - RentalObject
+   *     responses:
+   *       '200':
+   *         description: Successfully retrieved the parking space.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/VacantParkingSpace'
+   *       '500':
+   *         description: Internal server error. Failed to fetch parking space.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   description: The error message.
+   */
+  router.get('(.*)/parking-spaces/by-code/:rentalObjectCode', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const rentalObjectCode = ctx.params.rentalObjectCode
+
+    const result = await getParkingSpace(rentalObjectCode)
+
+    if (!result.ok) {
+      logger.error(result.err, 'Error fetching parking space:')
+      ctx.status = 500
+      ctx.body = {
+        error: 'An error occurred while fetching parking space by code.',
+        ...metadata,
+      }
+      return
+    }
+
+    ctx.status = 200
+    ctx.body = { content: result.data, ...metadata }
+  })
+
   /**
    * @swagger
    * /parkingspaces/{id}:
@@ -39,10 +154,11 @@ export const routes = (router: KoaRouter) => {
    *             schema:
    *               type: object
    */
-  //todo: refactor the subsequent requests to use same data source (use soap service instead of mimer.nu api)
+  //todo: refactor the subsequent requests to use same data source as the two above)
+
   router.get('(.*)/parkingspaces/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
-    const responseData = await getParkingSpace(ctx.params.id)
+    const responseData = await getParkingSpaceOld(ctx.params.id)
 
     ctx.body = { content: responseData, ...metadata }
   })
