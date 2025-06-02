@@ -85,6 +85,7 @@ export const routes = (router: KoaRouter) => {
       ctx.status = 500
       ctx.body = {
         error: 'An error occurred while fetching parking spaces.',
+        ...metadata,
       }
     }
   })
@@ -144,6 +145,7 @@ export const routes = (router: KoaRouter) => {
     ctx.status = 500
     ctx.body = {
       error: 'An error occurred while fetching parking spaces.',
+      ...metadata,
     }
   })
 
