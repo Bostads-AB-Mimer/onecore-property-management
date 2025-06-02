@@ -62,7 +62,7 @@ describe('parking spaces', () => {
     it('Handles errors gracefully when fetching parking spaces', async () => {
       jest.spyOn(xpandAdapter, 'getParkingSpaces').mockResolvedValue({
         ok: false,
-        err: 'get-parking-spaces-failed',
+        err: 'unknown',
       })
 
       const res = await request(app.callback()).get('/parking-spaces')
@@ -104,9 +104,9 @@ describe('parking spaces', () => {
         '/parking-spaces/by-code/code-404'
       )
 
-      expect(res.status).toBe(500)
+      expect(res.status).toBe(404)
       expect(res.body.error).toBe(
-        'An error occurred while fetching parking space by code.'
+        'An error occurred while fetching parking space by Rental Object Code: code-404'
       )
     })
   })

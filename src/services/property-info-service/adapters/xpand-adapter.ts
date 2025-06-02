@@ -571,10 +571,7 @@ const getAllVacantParkingSpaces = async (): Promise<
 const getParkingSpace = async (
   rentalObjectCode: string
 ): Promise<
-  AdapterResult<
-    VacantParkingSpace,
-    'get-parking-space-failed' | 'parking-space-not-found'
-  >
+  AdapterResult<VacantParkingSpace, 'unknown' | 'parking-space-not-found'>
 > => {
   try {
     const { parkingSpacesQuery } = buildSubQueries()
@@ -584,6 +581,9 @@ const getParkingSpace = async (
       .first()
 
     if (!result) {
+      logger.error(
+        `Parking space not found by Rental Object Code: ${rentalObjectCode}`
+      )
       return { ok: false, err: 'parking-space-not-found' }
     }
 
@@ -591,17 +591,14 @@ const getParkingSpace = async (
     return { ok: true, data: rentalObject }
   } catch (err) {
     logger.error(err, 'tenantLeaseAdapter.getRentalObject')
-    return { ok: false, err: 'get-parking-space-failed' }
+    return { ok: false, err: 'unknown' }
   }
 }
 
 const getParkingSpaces = async (
   includeRentalObjectCodes?: string[]
 ): Promise<
-  AdapterResult<
-    VacantParkingSpace[],
-    'get-parking-spaces-failed' | 'parking-spaces-not-found'
-  >
+  AdapterResult<VacantParkingSpace[], 'unknown' | 'parking-spaces-not-found'>
 > => {
   try {
     const { parkingSpacesQuery } = buildSubQueries()
@@ -614,6 +611,9 @@ const getParkingSpaces = async (
     const results = await query
 
     if (!results || results.length === 0) {
+      logger.error(
+        `No parking spaces found for rental object codes: ${includeRentalObjectCodes}`
+      )
       return { ok: false, err: 'parking-spaces-not-found' }
     }
 
@@ -623,7 +623,7 @@ const getParkingSpaces = async (
     return { ok: true, data: rentalObjects }
   } catch (err) {
     logger.error(err, 'tenantLeaseAdapter.getRentalObjects')
-    return { ok: false, err: 'get-parking-spaces-failed' }
+    return { ok: false, err: 'unknown' }
   }
 }
 

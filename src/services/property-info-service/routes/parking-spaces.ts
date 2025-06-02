@@ -66,18 +66,27 @@ export const routes = (router: KoaRouter) => {
 
     const result = await getParkingSpaces(includeRentalObjectCodes)
 
-    if (!result.ok) {
-      logger.error(result.err, 'Error fetching rental objects:')
-      ctx.status = 500
+    if (result.ok) {
+      ctx.status = 200
+      ctx.body = { content: result.data, ...metadata }
+      return
+    }
+
+    if (result.err == 'parking-spaces-not-found') {
+      ctx.status = 404
       ctx.body = {
-        error: 'An error occurred while fetching parking spaces.',
+        error: `No parking spaces found for rental object codes: ${includeRentalObjectCodes}`,
         ...metadata,
       }
       return
     }
 
-    ctx.status = 200
-    ctx.body = { content: result.data, ...metadata }
+    if (result.err == 'unknown') {
+      ctx.status = 500
+      ctx.body = {
+        error: 'An error occurred while fetching parking spaces.',
+      }
+    }
   })
 
   /**
@@ -117,18 +126,25 @@ export const routes = (router: KoaRouter) => {
 
     const result = await getParkingSpace(rentalObjectCode)
 
-    if (!result.ok) {
-      logger.error(result.err, 'Error fetching parking space:')
-      ctx.status = 500
+    if (result.ok) {
+      ctx.status = 200
+      ctx.body = { content: result.data, ...metadata }
+      return
+    }
+
+    if (result.err == 'parking-space-not-found') {
+      ctx.status = 404
       ctx.body = {
-        error: 'An error occurred while fetching parking space by code.',
+        error: `An error occurred while fetching parking space by Rental Object Code: ${rentalObjectCode}`,
         ...metadata,
       }
       return
     }
 
-    ctx.status = 200
-    ctx.body = { content: result.data, ...metadata }
+    ctx.status = 500
+    ctx.body = {
+      error: 'An error occurred while fetching parking spaces.',
+    }
   })
 
   /**
