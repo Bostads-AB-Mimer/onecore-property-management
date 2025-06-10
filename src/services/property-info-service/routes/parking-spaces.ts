@@ -24,7 +24,7 @@ export const routes = (router: KoaRouter) => {
    *     summary: Get parking spaces by codes
    *     description: Fetches parking spaces filtered by includeRentalObjectCodes.
    *     tags:
-   *       - RentalObject
+   *       - Parking Spaces
    *     parameters:
    *       - in: query
    *         name: includeRentalObjectCodes
@@ -97,7 +97,7 @@ export const routes = (router: KoaRouter) => {
    *     summary: Get a parking space by rental object code
    *     description: Fetches a parking space by Rental Object Code.
    *     tags:
-   *       - RentalObject
+   *       - Parking Spaces
    *     responses:
    *       '200':
    *         description: Successfully retrieved the parking space.
@@ -155,7 +155,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get parking space details by ID
    *     tags:
-   *       - Property management
+   *       - Parking Spaces
    *     description: Retrieve the details of a parking space identified by {id}.
    *     parameters:
    *       - in: path
@@ -187,7 +187,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get published parking space details by ID
    *     tags:
-   *       - Property management
+   *       - Parking Spaces
    *     description: Retrieve the details of a published parking space identified by {id} from the SOAP service.
    *     parameters:
    *       - in: path
