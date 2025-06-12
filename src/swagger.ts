@@ -11,5 +11,6 @@ export const swaggerSpec = {
   apis: [
     `${basePath}/services/health-service/*.{ts,js}`,
     `${basePath}/services/property-info-service/*.{ts,js}`,
+    `${basePath}/services/property-info-service/routes/*.{ts,js}`,
   ],
 }

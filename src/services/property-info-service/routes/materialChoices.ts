@@ -27,7 +27,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get room types with material options by rental property ID
    *     tags:
-   *       - Property management
+   *       - Material Choices
    *     description: Retrieve room types along with their material options for a specified rental property ID.
    *     parameters:
    *       - in: path
@@ -61,7 +61,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get material option by ID for a specific rental property
    *     tags:
-   *      - Property management
+   *      - Material Choices
    *     description: Retrieve a specific material option for a rental property by its ID and the material option ID.
    *     parameters:
    *       - in: path
@@ -99,7 +99,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get rooms with material choices for a specific rental property
    *     tags:
-   *       -  Property management
+   *       -  Material Choices
    *     description: Retrieve rooms with their associated material choices for a rental property identified by {id}.
    *     parameters:
    *       - in: path
@@ -150,7 +150,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get material choices for a specific rental property
    *     tags:
-   *       -  Property management
+   *       -  Material Choices
    *     description: Retrieve material choices associated with a rental property identified by {id}.
    *     parameters:
    *       - in: path
@@ -186,7 +186,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get material choices for a specific apartment and contract
    *     tags:
-   *       - Property management
+   *       - Material Choices
    *     description: Retrieve material choices associated with a specific apartment and contract identified by {apartmentId} and {contractId}.
    *     parameters:
    *       - in: path
@@ -231,7 +231,7 @@ export const routes = (router: KoaRouter) => {
    *   get:
    *     summary: Get material choice statuses for rental properties
    *     tags:
-   *       - Property management
+   *       - Material Choices
    *     description: Retrieve the statuses of material choices associated with rental properties.
    *     parameters:
    *       - in: query
@@ -264,7 +264,7 @@ export const routes = (router: KoaRouter) => {
    *   post:
    *     summary: Save material choices for a specific rental property
    *     tags:
-   *       - Property management
+   *       - Material Choices
    *     description: Save the material choices associated with a rental property identified by {id}.
    *     parameters:
    *       - in: path
